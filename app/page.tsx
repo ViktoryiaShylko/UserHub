@@ -223,40 +223,49 @@ export default function HomePage() {
               </DialogHeader>
               
               <div className="grid gap-4 py-4">
-                {Object.entries({
-                  name: 'Name',
-                  username: 'Username',
-                  email: 'Email',
-                  phone: 'Phone',
-                  website: 'Website',
-                  company: 'Company'
-                }).map(([key, label]) => (
-                  <div key={key} className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
-                    <Label htmlFor={key} className="sm:text-right">
-                      {label}
-                    </Label>
-                    <Input
-                      id={key}
-                      type={key === 'email' ? 'email' : 'text'}
-                      value={key === 'company' ? newUser.company.name : newUser[key as keyof typeof newUser]}
-                      onChange={(e) => {
-                        if (key === 'company') {
-                          setNewUser({
-                            ...newUser,
-                            company: { name: e.target.value || 'Unknown Company' }
-                          });
-                        } else {
-                          setNewUser({
-                            ...newUser,
-                            [key]: e.target.value
-                          });
-                        }
-                      }}
-                      className="col-span-3"
-                      required
-                    />
-                  </div>
-                ))}
+              {Object.entries({
+  name: 'Name',
+  username: 'Username',
+  email: 'Email',
+  phone: 'Phone',
+  website: 'Website',
+  company: 'Company'
+}).map(([key, label]) => (
+  <div key={key} className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
+    <Label htmlFor={key} className="sm:text-right">
+      {label}
+    </Label>
+    {key === 'company' ? (
+      <Input
+        id={key}
+        type="text"
+        value={newUser.company.name}
+        onChange={(e) => {
+          setNewUser({
+            ...newUser,
+            company: { name: e.target.value || 'Unknown Company' }
+          });
+        }}
+        className="col-span-3"
+        required
+      />
+    ) : (
+      <Input
+        id={key}
+        type={key === 'email' ? 'email' : 'text'}
+        value={newUser[key as keyof Omit<typeof newUser, 'company' | 'address'>] as string}
+        onChange={(e) => {
+          setNewUser({
+            ...newUser,
+            [key]: e.target.value
+          });
+        }}
+        className="col-span-3"
+        required
+      />
+    )}
+  </div>
+))}
               </div>
               
               <DialogFooter>
