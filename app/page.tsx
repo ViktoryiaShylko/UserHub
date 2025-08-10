@@ -76,15 +76,15 @@ export default function HomePage() {
       const apiUsers = await response.json();
       const localUsers = JSON.parse(localStorage.getItem('users') || '[]');
       
-      const mergedUsers = [...apiUsers, ...localUsers].reduce((acc: User[], user) => {
-        const existingIndex = acc.findIndex(u => u.id === user.id);
+      const mergedUsers = [...apiUsers, ...localUsers].reduce((acc: User[], user: User) => {
+        const existingIndex = acc.findIndex((u: User) => u.id === user.id);
         if (existingIndex === -1) {
           acc.push(user);
-        } else if (localUsers.some(lu => lu.id === user.id)) {
+        } else if (localUsers.some((lu: User) => lu.id === user.id)) {
           acc[existingIndex] = user;
         }
         return acc;
-      }, []);
+      }, [] as User[]);
       
       setUsers(mergedUsers);
     } catch (error) {
